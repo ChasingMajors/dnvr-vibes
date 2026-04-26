@@ -1,6 +1,7 @@
 const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzf7UV6U1xzJl0dwaBnpduHhnlfgK04MxKzHasFhJ0SVH2irKzLoqfFV99v6VQbNoP8Fg/exec";
+const PLACES_DATA_URL = "./places.json";
 
-const places = [
+let places = [
   {
     id: 1,
     name: "Blue Hour Espresso",
@@ -309,6 +310,145 @@ const places = [
   }
 ];
 
+const localStarterPlaces = [
+  {
+    id: 101,
+    name: "Cherry Cricket",
+    category: "Burgers",
+    neighborhood: "Cherry Creek",
+    vibe_score: 96,
+    trend_score: 88,
+    description: "A Denver burger institution with a lively room, classic energy, and the kind of menu that works for almost any group.",
+    best_for: "Classic Denver burger nights",
+    why_it_hits: "It feels familiar, social, and dependable without losing the fun of a real night out.",
+    tags: ["classic", "group-friendly", "local energy", "casual"],
+    local_pick: true,
+    visitor_friendly: true,
+    image_url: "",
+    website_url: "https://www.cherrycricket.com/",
+    map_url: "https://maps.google.com/?q=Cherry+Cricket+Denver"
+  },
+  {
+    id: 102,
+    name: "My Brother's Bar",
+    category: "Burgers",
+    neighborhood: "Highland",
+    vibe_score: 94,
+    trend_score: 82,
+    description: "Old-school Denver character, low-friction service, and a burger stop that feels more like a ritual than a trend.",
+    best_for: "Low-key local hangs",
+    why_it_hits: "The appeal is the atmosphere as much as the burger: simple, steady, and very Denver.",
+    tags: ["old-school", "local", "low-key", "historic"],
+    local_pick: true,
+    visitor_friendly: true,
+    image_url: "",
+    website_url: "https://mybrothersbar.com/",
+    map_url: "https://maps.google.com/?q=My+Brother%27s+Bar+Denver"
+  },
+  {
+    id: 103,
+    name: "Crown Burgers",
+    category: "Burgers",
+    neighborhood: "South Denver",
+    vibe_score: 91,
+    trend_score: 78,
+    description: "A satisfying no-fuss burger move when the plan is less about scene and more about getting something craveable.",
+    best_for: "Quick comfort-food stops",
+    why_it_hits: "It is practical, filling, and easy to recommend when everyone just wants a good burger without overthinking it.",
+    tags: ["quick bite", "comfort food", "casual", "easy"],
+    local_pick: true,
+    visitor_friendly: false,
+    image_url: "",
+    website_url: "",
+    map_url: "https://maps.google.com/?q=Crown+Burgers+Denver"
+  },
+  {
+    id: 104,
+    name: "Park Burger",
+    category: "Burgers",
+    neighborhood: "Platt Park",
+    vibe_score: 90,
+    trend_score: 83,
+    description: "Bright, approachable, and easy to fold into a casual Denver day when the group wants burgers and no drama.",
+    best_for: "Casual lunch and neighborhood dinners",
+    why_it_hits: "It has an easygoing rhythm, broad appeal, and a neighborhood feel that keeps it useful.",
+    tags: ["neighborhood", "lunch", "family-friendly", "casual"],
+    local_pick: true,
+    visitor_friendly: true,
+    image_url: "",
+    website_url: "https://parkburger.com/",
+    map_url: "https://maps.google.com/?q=Park+Burger+Denver"
+  },
+  {
+    id: 105,
+    name: "Hopdoddy Burger Bar",
+    category: "Burgers",
+    neighborhood: "Union Station",
+    vibe_score: 89,
+    trend_score: 84,
+    description: "A polished, visitor-friendly burger option with a lively pace and easy access to downtown plans.",
+    best_for: "Visitors and downtown meetups",
+    why_it_hits: "It is simple to find, easy to coordinate, and energetic enough to feel like part of the night.",
+    tags: ["downtown", "visitor-friendly", "meetup", "lively"],
+    local_pick: false,
+    visitor_friendly: true,
+    image_url: "",
+    website_url: "https://www.hopdoddy.com/",
+    map_url: "https://maps.google.com/?q=Hopdoddy+Burger+Bar+Denver"
+  },
+  {
+    id: 106,
+    name: "Illegal Burger",
+    category: "Burgers",
+    neighborhood: "Capitol Hill",
+    vibe_score: 88,
+    trend_score: 80,
+    description: "A casual burger stop with enough personality to work before a show, after errands, or during a loose night out.",
+    best_for: "Casual pregame bites",
+    why_it_hits: "It fits the middle of the plan: fast enough to be easy, fun enough to feel intentional.",
+    tags: ["casual", "quick bite", "pregame", "cap hill"],
+    local_pick: true,
+    visitor_friendly: true,
+    image_url: "",
+    website_url: "https://www.illegalburger.com/",
+    map_url: "https://maps.google.com/?q=Illegal+Burger+Denver"
+  },
+  {
+    id: 107,
+    name: "The Mighty",
+    category: "Burgers",
+    neighborhood: "LoHi",
+    vibe_score: 87,
+    trend_score: 86,
+    description: "A more current-feeling burger pick with a social edge, good for turning a quick meal into a night-starting move.",
+    best_for: "Friend hangs and first stops",
+    why_it_hits: "The draw is the mix of casual food and neighborhood momentum.",
+    tags: ["lohi", "social", "friends", "night out"],
+    local_pick: true,
+    visitor_friendly: true,
+    image_url: "",
+    website_url: "",
+    map_url: "https://maps.google.com/?q=The+Mighty+Denver+burger"
+  },
+  {
+    id: 108,
+    name: "Bodega Denver",
+    category: "Burgers",
+    neighborhood: "Sunnyside",
+    vibe_score: 86,
+    trend_score: 90,
+    description: "A buzzy food stop that works when you want something more current than a standard burger run.",
+    best_for: "Trending casual food plans",
+    why_it_hits: "It feels plugged into the city's current food conversation and gives the category a fresher angle.",
+    tags: ["trending", "sunnyside", "casual", "buzz"],
+    local_pick: true,
+    visitor_friendly: true,
+    image_url: "",
+    website_url: "https://www.bodegadenver.com/",
+    map_url: "https://maps.google.com/?q=Bodega+Denver"
+  }
+];
+
 const interests = [
   "Coffee",
   "Breweries",
@@ -322,6 +462,7 @@ const interests = [
 
 const state = {
   currentView: "home",
+  currentCategoryPage: "Burgers",
   selectedCategory: "All",
   audience: "all",
   searchTerm: "",
@@ -350,23 +491,32 @@ const elements = {
   resultsCount: document.getElementById("resultsCount"),
   exploreList: document.getElementById("exploreList"),
   emptyState: document.getElementById("emptyState"),
+  categoryTitle: document.getElementById("categoryTitle"),
+  categoryKicker: document.getElementById("categoryKicker"),
+  categorySubtitle: document.getElementById("categorySubtitle"),
+  categoryList: document.getElementById("categoryList"),
+  categoryEmptyState: document.getElementById("categoryEmptyState"),
   interestOptions: document.getElementById("interestOptions"),
   alertsForm: document.getElementById("alertsForm"),
   emailInput: document.getElementById("emailInput"),
   audienceTypeInput: document.getElementById("audienceTypeInput"),
-  formFeedback: document.getElementById("formFeedback")
+  formFeedback: document.getElementById("formFeedback"),
+  successDialog: document.getElementById("successDialog"),
+  dialogCloseButton: document.getElementById("dialogCloseButton")
 };
 
-const categories = ["All", ...new Set(places.map((place) => place.category))];
+let categories = [];
 
-function init() {
+async function init() {
+  await loadPlaceData();
+  refreshCategories();
   elements.placeCount.textContent = String(places.length);
   buildCategoryChips();
   buildInterestOptions();
   bindEvents();
   renderHome();
   renderExplore();
-  routeTo(window.location.hash.replace("#", "") || "home", false);
+  routeFromHash(window.location.hash.replace("#", "") || "home", false);
   registerServiceWorker();
 }
 
@@ -411,9 +561,15 @@ function bindEvents() {
   });
 
   elements.alertsForm.addEventListener("submit", handleAlertsSubmit);
+  elements.dialogCloseButton.addEventListener("click", closeSuccessDialog);
+  elements.successDialog.addEventListener("click", (event) => {
+    if (event.target === elements.successDialog) {
+      closeSuccessDialog();
+    }
+  });
 
   window.addEventListener("hashchange", () => {
-    routeTo(window.location.hash.replace("#", "") || "home", false);
+    routeFromHash(window.location.hash.replace("#", "") || "home", false);
   });
 
   window.addEventListener("beforeinstallprompt", (event) => {
@@ -432,6 +588,33 @@ function bindEvents() {
     deferredPrompt = null;
     elements.installButton.hidden = true;
   });
+}
+
+async function loadPlaceData() {
+  if (window.location.protocol === "file:") {
+    places = localStarterPlaces;
+    return;
+  }
+
+  try {
+    const response = await fetch(PLACES_DATA_URL, { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error(`Places data request failed: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (Array.isArray(data.places) && data.places.length > 0) {
+      places = data.places;
+    }
+  } catch (error) {
+    console.warn("Using fallback place data:", error);
+  }
+}
+
+function refreshCategories() {
+  categories = ["All", ...new Set(places.map((place) => place.category))];
 }
 
 function buildCategoryChips() {
@@ -454,8 +637,7 @@ function buildCategoryChips() {
     button.addEventListener("click", () => {
       state.selectedCategory = button.dataset.homeCategory;
       syncCategoryChips();
-      routeTo("explore");
-      renderExplore();
+      routeToCategory(button.dataset.homeCategory);
     });
   });
 
@@ -463,7 +645,13 @@ function buildCategoryChips() {
     button.addEventListener("click", () => {
       state.selectedCategory = button.dataset.category;
       syncCategoryChips();
-      renderExplore();
+      if (button.dataset.category === "All") {
+        routeTo("explore");
+        renderExplore();
+        return;
+      }
+
+      routeToCategory(button.dataset.category);
     });
   });
 }
@@ -487,8 +675,18 @@ function buildInterestOptions() {
     .join("");
 }
 
+function routeFromHash(hashValue, updateHash = true) {
+  if (hashValue.startsWith("category-")) {
+    const category = decodeURIComponent(hashValue.replace("category-", ""));
+    routeToCategory(category, updateHash);
+    return;
+  }
+
+  routeTo(hashValue, updateHash);
+}
+
 function routeTo(viewName, updateHash = true) {
-  const nextView = ["home", "explore", "alerts"].includes(viewName) ? viewName : "home";
+  const nextView = ["home", "explore", "alerts", "category"].includes(viewName) ? viewName : "home";
   state.currentView = nextView;
 
   elements.views.forEach((view) => {
@@ -508,6 +706,18 @@ function routeTo(viewName, updateHash = true) {
   }
 
   window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function routeToCategory(category, updateHash = true) {
+  state.currentCategoryPage = category;
+  state.selectedCategory = category;
+  syncCategoryChips();
+  renderCategoryPage(category);
+  routeTo("category", false);
+
+  if (updateHash) {
+    window.location.hash = `category-${encodeURIComponent(category)}`;
+  }
 }
 
 function renderHome() {
@@ -531,6 +741,24 @@ function renderExplore() {
     state.selectedCategory === "All" ? "All places" : `${state.selectedCategory} picks`;
   elements.emptyState.hidden = filtered.length > 0;
   elements.exploreList.innerHTML = filtered.map((place) => createPlaceCard(place)).join("");
+}
+
+function renderCategoryPage(category) {
+  const categoryPlaces = sortPlaces(
+    applyAudienceFilter(places).filter((place) => place.category === category),
+    "vibe"
+  );
+
+  elements.categoryKicker.textContent = `${categoryPlaces.length} ranked picks`;
+  elements.categoryTitle.textContent = `Best ${category} in Denver`;
+  elements.categorySubtitle.textContent =
+    category === "Burgers"
+      ? "Burger picks ranked by vibe, neighborhood energy, and whether the stop feels worth the move right now."
+      : `${category} picks ranked by vibe, taste, and good times.`;
+  elements.categoryEmptyState.hidden = categoryPlaces.length > 0;
+  elements.categoryList.innerHTML = categoryPlaces
+    .map((place, index) => createRankingCard(place, index + 1))
+    .join("");
 }
 
 function getFilteredPlaces() {
@@ -645,6 +873,41 @@ function createPlaceCard(place) {
   `;
 }
 
+function createRankingCard(place, rank) {
+  const tags = place.tags.slice(0, 4).map((tag) => `<span class="tag-badge">${tag}</span>`).join("");
+
+  return `
+    <article class="ranking-card">
+      <div class="rank-number">#${rank}</div>
+      <div class="ranking-content">
+        <div class="ranking-topline">
+          <div>
+            <p class="section-kicker">${place.neighborhood}</p>
+            <h3>${place.name}</h3>
+          </div>
+          <span class="vibe-badge">Vibe ${place.vibe_score}</span>
+        </div>
+        <p class="place-description">${place.description}</p>
+        <div class="ranking-meta">
+          <span class="meta-pill">Best For: ${place.best_for}</span>
+          <span class="meta-pill">Trending ${place.trend_score}</span>
+          ${place.local_pick ? '<span class="meta-pill">Local Pick</span>' : ""}
+          ${place.visitor_friendly ? '<span class="meta-pill">Visitor Friendly</span>' : ""}
+        </div>
+        <div class="detail-block">
+          <strong>Why It Hits</strong>
+          <p class="detail-copy">${place.why_it_hits}</p>
+        </div>
+        <div class="badge-row">${tags}</div>
+        <div class="link-row">
+          ${place.website_url ? `<a href="${place.website_url}" target="_blank" rel="noreferrer">Website</a>` : ""}
+          ${place.map_url ? `<a href="${place.map_url}" target="_blank" rel="noreferrer">Map</a>` : ""}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 async function handleAlertsSubmit(event) {
   event.preventDefault();
 
@@ -695,7 +958,8 @@ async function handleAlertsSubmit(event) {
     });
 
     elements.alertsForm.reset();
-    setFeedback("You're on the list. Current Vibes are coming your way.", "success");
+    setFeedback("Thanks. We'll share key updates on a limited basis.", "success");
+    openSuccessDialog();
   } catch (error) {
     console.error("DNVR Vibes signup failed", error);
     setFeedback("Something went sideways. Try again in a minute.", "error");
@@ -731,6 +995,16 @@ function setFormSubmitting(isSubmitting) {
     submitButton.disabled = isSubmitting;
     submitButton.textContent = isSubmitting ? "Joining..." : "Join the list";
   }
+}
+
+function openSuccessDialog() {
+  elements.successDialog.hidden = false;
+  elements.successDialog.showModal();
+}
+
+function closeSuccessDialog() {
+  elements.successDialog.close();
+  elements.successDialog.hidden = true;
 }
 
 function registerServiceWorker() {
