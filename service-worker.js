@@ -1,4 +1,4 @@
-const CACHE_NAME = "dnvr-vibes-v1";
+const CACHE_NAME = "dnvr-vibes-v2";
 const APP_ASSETS = [
   "./",
   "./index.html",
@@ -31,6 +31,19 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") {
+    return;
+  }
+
+  if (new URL(event.request.url).pathname.endsWith("/places.json")) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request))
+    );
     return;
   }
 
