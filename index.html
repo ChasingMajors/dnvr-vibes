@@ -1,1 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>DNVR Vibes</title>
+    <meta
+      name="description"
+      content="DNVR Vibes helps Denver locals and visitors find the best spots by vibe, taste, and good times."
+    />
+    <meta name="theme-color" content="#07131f" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Denver spots ranked by vibe, taste, and good times.</p>
+          <h1>DNVR Vibes</h1>
+        </div>
+        <button class="ghost-button" id="installButton" type="button" hidden>Install</button>
+      </header>
+
+      <main class="main-content">
+        <section class="view is-active" id="homeView" data-view="home" aria-labelledby="homeTitle">
+          <div class="hero-card">
+            <div class="hero-copy">
+              <p class="section-kicker">Right now in Denver</p>
+              <h2 id="homeTitle">Where should you actually go?</h2>
+              <p>
+                Fast picks for coffee runs, patio hangs, date nights, and late Denver energy without
+                the generic listicle feel.
+              </p>
+            </div>
+            <div class="hero-actions">
+              <button class="primary-button" type="button" data-route="explore">Explore vibes</button>
+              <button class="secondary-button" type="button" data-scroll-target="alertsCta">
+                Get alerts
+              </button>
+            </div>
+            <div class="hero-stats">
+              <div class="stat-pill">
+                <span class="stat-label">Mock spots</span>
+                <strong id="placeCount">0</strong>
+              </div>
+              <div class="stat-pill">
+                <span class="stat-label">Top signal</span>
+                <strong>Vibe Score</strong>
+              </div>
+            </div>
+          </div>
+
+          <section class="content-block">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Quick jump</p>
+                <h3>Browse by vibe</h3>
+              </div>
+            </div>
+            <div class="chip-row" id="homeCategoryChips"></div>
+          </section>
+
+          <section class="content-block">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Trending now</p>
+                <h3>Denver spots getting buzz</h3>
+              </div>
+              <button class="text-button" type="button" data-route="explore">See all</button>
+            </div>
+            <div class="card-stack" id="trendingList"></div>
+          </section>
+
+          <section class="content-block">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Near you soon</p>
+                <h3>Best Vibes Near You</h3>
+              </div>
+            </div>
+            <div class="placeholder-panel">
+              <p class="placeholder-title">Location-aware picks are coming next.</p>
+              <p class="placeholder-copy">
+                For now, we’re spotlighting highly rated local energy picks across Denver neighborhoods.
+              </p>
+              <div class="mini-pills" id="nearYouPills"></div>
+            </div>
+          </section>
+
+          <section class="content-block">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Featured</p>
+                <h3>Worth the trip</h3>
+              </div>
+            </div>
+            <div class="card-stack" id="featuredList"></div>
+          </section>
+
+          <section class="content-block" id="alertsCta">
+            <div class="cta-panel">
+              <div>
+                <p class="section-kicker">Stay in the loop</p>
+                <h3>Get Current Vibes alerts</h3>
+                <p>
+                  Be first to know when the city gets hot, patio weather hits, or a fresh favorite starts
+                  trending.
+                </p>
+              </div>
+              <button class="primary-button" type="button" data-route="alerts">Join alerts</button>
+            </div>
+          </section>
+        </section>
+
+        <section
+          class="view"
+          id="exploreView"
+          data-view="explore"
+          aria-labelledby="exploreTitle"
+          hidden
+        >
+          <section class="content-block explore-panel">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Explore</p>
+                <h2 id="exploreTitle">Find the right Denver move</h2>
+              </div>
+            </div>
+
+            <label class="input-shell">
+              <span class="input-label">Search</span>
+              <input
+                id="searchInput"
+                type="search"
+                inputmode="search"
+                placeholder="Search name, neighborhood, tags, best for..."
+                autocomplete="off"
+              />
+            </label>
+
+            <div class="filter-group">
+              <div class="filter-heading">
+                <span>Categories</span>
+                <button class="text-button" id="clearCategoryButton" type="button">Clear</button>
+              </div>
+              <div class="chip-row" id="exploreCategoryChips"></div>
+            </div>
+
+            <div class="controls-grid">
+              <label class="input-shell">
+                <span class="input-label">Audience</span>
+                <select id="audienceFilter">
+                  <option value="all">Everyone</option>
+                  <option value="local">Local</option>
+                  <option value="visiting">Visiting</option>
+                </select>
+              </label>
+
+              <label class="input-shell">
+                <span class="input-label">Sort</span>
+                <select id="sortFilter">
+                  <option value="vibe">Vibe Score</option>
+                  <option value="trending">Trending</option>
+                  <option value="newest">Newest</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <section class="content-block">
+            <div class="results-header">
+              <div>
+                <p class="section-kicker">Results</p>
+                <h3 id="resultsTitle">All places</h3>
+              </div>
+              <span class="results-count" id="resultsCount">0 spots</span>
+            </div>
+            <div class="card-stack" id="exploreList"></div>
+            <div class="empty-state" id="emptyState" hidden>
+              <h3>No spots match that mix yet.</h3>
+              <p>Try a different category, audience, or search phrase.</p>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="alertsView" data-view="alerts" aria-labelledby="alertsTitle" hidden>
+          <section class="content-block">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Alerts</p>
+                <h2 id="alertsTitle">Get the Current Vibes</h2>
+                <p class="subtle-copy">
+                  No login. Just a quick signup for future Denver picks and trending spot alerts.
+                </p>
+              </div>
+            </div>
+
+            <form id="alertsForm" class="alerts-form" novalidate>
+              <label class="input-shell">
+                <span class="input-label">Email</span>
+                <input id="emailInput" name="email" type="email" placeholder="you@example.com" required />
+              </label>
+
+              <label class="input-shell">
+                <span class="input-label">Audience</span>
+                <select id="audienceTypeInput" name="audience_type" required>
+                  <option value="Local">Local</option>
+                  <option value="Visiting Denver">Visiting Denver</option>
+                </select>
+              </label>
+
+              <fieldset class="interest-fieldset">
+                <legend class="input-label">Interests</legend>
+                <div class="checkbox-grid" id="interestOptions"></div>
+              </fieldset>
+
+              <input type="hidden" name="source" value="alerts page" />
+
+              <button class="primary-button full-width" type="submit">Join the list</button>
+              <p class="form-feedback" id="formFeedback" role="status" aria-live="polite"></p>
+            </form>
+          </section>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Primary">
+        <button class="nav-item is-active" type="button" data-route="home" aria-current="page">
+          <span class="nav-icon">H</span>
+          <span>Home</span>
+        </button>
+        <button class="nav-item" type="button" data-route="explore">
+          <span class="nav-icon">E</span>
+          <span>Explore</span>
+        </button>
+        <button class="nav-item" type="button" data-route="alerts">
+          <span class="nav-icon">A</span>
+          <span>Alerts</span>
+        </button>
+      </nav>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
 
