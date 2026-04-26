@@ -1,12 +1,12 @@
 {
   "name": "DNVR Vibes",
   "short_name": "DNVR Vibes",
-  "description": "Denver spots ranked by vibe, taste, and good times.",
+  "description": "Denver hottest spots ranked by vibe, taste, and good times.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#050b12",
-  "theme_color": "#07131f",
+  "background_color": "#f7f5ef",
+  "theme_color": "#f7f5ef",
   "orientation": "portrait",
   "icons": [
     {
