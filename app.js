@@ -1,3 +1,5 @@
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzf7UV6U1xzJl0dwaBnpduHhnlfgK04MxKzHasFhJ0SVH2irKzLoqfFV99v6VQbNoP8Fg/exec";
+
 const places = [
   {
     id: 1,
@@ -643,7 +645,7 @@ function createPlaceCard(place) {
   `;
 }
 
-function handleAlertsSubmit(event) {
+async function handleAlertsSubmit(event) {
   event.preventDefault();
 
   const email = elements.emailInput.value.trim();
@@ -668,13 +670,38 @@ function handleAlertsSubmit(event) {
     email,
     audience_type: elements.audienceTypeInput.value,
     interests: selectedInterests,
-    source: "alerts page"
+    source: "alerts page",
+    page_url: window.location.href,
+    user_agent: navigator.userAgent
   };
 
-  // This is intentionally local-only for MVP so the form works before Apps Script is connected.
-  console.info("DNVR Vibes placeholder signup payload", payload);
-  elements.alertsForm.reset();
-  setFeedback("You’re on the list. Current Vibes are coming your way.", "success");
+  if (!GOOGLE_APPS_SCRIPT_URL) {
+    console.info("DNVR Vibes signup payload waiting for Apps Script URL", payload);
+    setFeedback("Apps Script URL is not connected yet. Add it in app.js to save signups.", "error");
+    return;
+  }
+
+  setFormSubmitting(true);
+  setFeedback("Saving your alert preferences...", "neutral");
+
+  try {
+    await fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    elements.alertsForm.reset();
+    setFeedback("You're on the list. Current Vibes are coming your way.", "success");
+  } catch (error) {
+    console.error("DNVR Vibes signup failed", error);
+    setFeedback("Something went sideways. Try again in a minute.", "error");
+  } finally {
+    setFormSubmitting(false);
+  }
 }
 
 function isValidEmail(email) {
@@ -683,12 +710,27 @@ function isValidEmail(email) {
 
 function setFeedback(message, type) {
   elements.formFeedback.textContent = message;
-  elements.formFeedback.classList.add(type === "success" ? "is-success" : "is-error");
+  if (type === "success") {
+    elements.formFeedback.classList.add("is-success");
+  }
+
+  if (type === "error") {
+    elements.formFeedback.classList.add("is-error");
+  }
 }
 
 function resetFeedback() {
   elements.formFeedback.textContent = "";
   elements.formFeedback.classList.remove("is-success", "is-error");
+}
+
+function setFormSubmitting(isSubmitting) {
+  const submitButton = elements.alertsForm.querySelector('button[type="submit"]');
+
+  if (submitButton) {
+    submitButton.disabled = isSubmitting;
+    submitButton.textContent = isSubmitting ? "Joining..." : "Join the list";
+  }
 }
 
 function registerServiceWorker() {
