@@ -223,7 +223,42 @@
             </form>
           </section>
         </section>
+
+        <section
+          class="view"
+          id="categoryView"
+          data-view="category"
+          aria-labelledby="categoryTitle"
+          hidden
+        >
+          <section class="category-hero">
+            <button class="text-button" type="button" data-route="explore">Back to Explore</button>
+            <p class="section-kicker" id="categoryKicker">Ranked picks</p>
+            <h2 id="categoryTitle">Best Burgers in Denver</h2>
+            <p id="categorySubtitle">
+              Burger picks ranked by vibe, neighborhood energy, and whether the stop feels worth the
+              move right now.
+            </p>
+          </section>
+
+          <section class="content-block">
+            <div class="ranking-list" id="categoryList"></div>
+            <div class="empty-state" id="categoryEmptyState" hidden>
+              <h3>No picks here yet.</h3>
+              <p>Add places to the data source and this page will fill in automatically.</p>
+            </div>
+          </section>
+        </section>
       </main>
+
+      <dialog class="success-dialog" id="successDialog" hidden>
+        <div class="dialog-panel">
+          <p class="section-kicker">You are on the list</p>
+          <h2>Thanks!</h2>
+          <p>We'll share key updates on a limited basis.</p>
+          <button class="primary-button full-width" id="dialogCloseButton" type="button">Sounds good</button>
+        </div>
+      </dialog>
 
       <nav class="bottom-nav" aria-label="Primary">
         <button class="nav-item is-active" type="button" data-route="home" aria-current="page">
