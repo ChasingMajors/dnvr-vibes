@@ -1,0 +1,32 @@
+name: Update Places JSON
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 9 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-places-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Places data from Apps Script
+        run: |
+          curl --fail --silent --show-error --location \
+            "https://script.google.com/macros/s/AKfycbzf7UV6U1xzJl0dwaBnpduHhnlfgK04MxKzHasFhJ0SVH2irKzLoqfFV99v6VQbNoP8Fg/exec?action=places" \
+            --output places.json
+
+      - name: Validate JSON
+        run: node -e "const fs = require('fs'); const data = JSON.parse(fs.readFileSync('places.json', 'utf8')); if (!Array.isArray(data.places)) throw new Error('places.json must include a places array'); console.log('places:', data.places.length);"
+
+      - name: Commit updated Places data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update places.json from Google Sheets
+          file_pattern: places.json
